@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import cop
 import random
+import numpy as np
 
 class robber():
     
@@ -62,24 +63,56 @@ class robber():
         self.direction = random.randint(1, 4)
         if(self.direction == 1):
             self.y += self.velocity
+            if(self.y > 50):
+                self.y -= 2*self.velocity
+                self.direction = 3
         elif(self.direction == 2):
             self.x += self.velocity
+            if(self.x > 50):
+                self.x -= 2*self.velocity
+                self.direction = 4
         elif(self.direction == 3):
             self.y -= self.velocity
+            if(self.y < -50):
+                self.y += 2*self.velocity
+                self.direction = 1
         elif(self.direction == 4):
             self.x -= self.velocity
-            
-g = robber([(20, 20), (40, 60), (-20, -20), (-80, -60),(10, -50), (70, -70), 
-            (-50, 20), (-30, 90)])
+            if(self.x < -50):
+                self.x += 2*self.velocity
+                self.direction = 2
+        
+       
+g = robber([(20, 20), (40, 60), (-20, -20), (-30, -30),(10, -50), (10, -10), 
+            (-50, 20), (-30, 50)])
+xlist = np.zeros(10001)
+ylist = np.zeros(10001)
 
 # fig, ax = plt.subplots()
 x_coords, y_coords = zip(*g.money_bag_coords)
 # square = patches.Rectangle(g.deposit_coords[0], g.deposit_size, g.deposit_size, linewidth=2, edgecolor='blue', facecolor='blue')
 # ax.add_patch(square)
-plt.figure(figsize=(8, 8))
-plt.scatter(g.deposit_x, g.deposit_y, s=10, label="Deposit Area")
-plt.scatter(x_coords, y_coords, color='red', s=10, label="Money Bag Locations")
-plt.title("Initial Location of Money Bags and Deposit Area")
-plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
-plt.gca().set_aspect('equal', adjustable='box')
-plt.show()
+# plt.figure(figsize=(8, 8))
+# plt.scatter(g.deposit_x, g.deposit_y, s=10, label="Deposit Area")
+# plt.scatter(x_coords, y_coords, color='red', s=10, label="Money Bag Locations")
+# plt.title("Initial Location of Money Bags and Deposit Area")
+# plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+# plt.gca().set_aspect('equal', adjustable='box')
+# plt.show()
+
+fig, ax = plt.subplots()
+line, = ax.plot([], [], '-o')
+ax.set_xlim(-50, 50)
+ax.set_ylim(-50, 50)
+ax.scatter(g.deposit_x, g.deposit_y, color='green',s=40, label="Deposit Area")
+ax.scatter(x_coords, y_coords, color='red', s=40, label="Money Bag Locations")
+for i in range(10000):
+    g.step()
+    xlist[i+1] = g.x
+    ylist[i+1] = g.y
+    
+    line.set_data(xlist[:i+2], ylist[:i+2])
+    plt.pause(.01)
+
+
+plt.show() 

@@ -9,37 +9,26 @@ import numpy as np
 import matplotlib.pyplot as plt
 import fnn 
 import ea
-
-#Parameters of the AND task
-#dataset = [[-1,-1],[-1,1],[1,-1],[1,1]]
-#labels = [0,0,0,1]
-
-
-# Parameters of the OR task
-#dataset = [[-1,-1],[-1,1],[1,-1],[1,1]]
-#labels = [0,1,1,1]
+import robber
+import cop
 
 # Parameters of the XOR task
 dataset = [[-1,-1],[-1,1],[1,-1],[1,1]]
 labels = [0,1,1,0]
-
-# Parameters for another task
-# dataset = [[-1,-1],[-1,1],[1,-1],[1,1],[-1,0],[1,0],[0,-1],[0,1],[-0.5,-0.5],[-0.5,0.5],[0.5,-0.5],[0.5,0.5]]
-# labels = [1,1,1,1,1,1,1,1,0,0,0,0]
-
 # Parameters of the neural network
-#layers = [2,1]
-#layers = [2,3,1]
-#layers = [2,3,3,3,1]
-#layers = [2,3,3,3,3,3,3,1]
-layers = [2,3,3,3,3,3,3,3,3,3,1]
+layers = [7, 10, 10, 4]
+
 # Parameters of the evolutionary algorithm
 genesize = np.sum(np.multiply(layers[1:],layers[:-1])) + np.sum(layers[1:]) 
 print("Number of parameters:",genesize)
 popsize = 50 
 recombProb = 0.5
 mutatProb = 0.01
-tournaments = 100*popsize 
+tournaments = 100*popsize
+
+money_bag_cords = [(20, 20), (40, 60), (-20, -20), (-80, -60),(10, -50), (70, -70), 
+            (-50, 20), (-30, 90)]
+cop_start = (10, -10)
 
 def fitnessFunction(genotype):
     # Step 1: Create the neural network.
@@ -50,8 +39,25 @@ def fitnessFunction(genotype):
     
     # Step 3. For each training point in the dataset, evaluate the current neural network.
     error = 0.0
-    for i in range(len(dataset)):
-        error += np.abs(a.forward(dataset[i]) - labels[i])
+    
+    robber = robber(money_bag_cords)
+    cop = Cop(cop_start[0], cop_start[1])
+    
+    steps = 100
+    
+    for i in range(steps):
+        
+        inputs = [robber.x, robber.y, cop.x, cop.y, 
+                  robber.money_bag_cords[0][0], robber.money_bag_cords[0][1],
+                  robber.deposit_x, robber.deposit_y]
+        
+        output = a.forward(inputs)
+        direction = np.argmax(output) + 1
+        
+        robber.step(direction, cop)
+        cop.look(robber.x, robber.y, robber.money_bag_cords, robber.deposit_x, robber.deposit_y)
+        if(cop.seen)
+        # error += np.abs(a.forward(dataset[i]) - labels[i])
 
     return 1 - (error/len(dataset))
 

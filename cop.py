@@ -21,15 +21,39 @@ class Cop:
         self.moneyBags = []
         self.depositBox = []
         
-    def step(self):
+    def step(self,output):
+        self.direction = np.round(3*output[0][0] + 1,0)
+        if self.seen:
+            self.velocity = np.round(np.min(4*[output[0][1]+1,5]),0)
+        else:
+            self.velocity = np.round(np.min(2*[output[0][1]+1,3]),0)
+            
+        # print("Output Velocity: " + str(output[0][1]))
+        # print("Actual Velocity: "+str(self.velocity))
+        
+        # print("Output Direction: " + str(output[0][0]))
+        # print("Actual Direction: "+str(self.direction))
+        
         if self.direction==2:
             self.x += self.velocity
-        if self.direction==4:
-            self.x -= self.velocity
-        if self.direction==1:
-            self.y += self.velocity
-        if self.direction==2:
+            if self.x>50:
+                self.x -= 2*self.velocity
+                self.direction = 4
+        elif self.direction == 3:
             self.y -= self.velocity
+            if self.y<-50:
+                self.y += 2*self.velocity
+                self.direction = 1
+        elif self.direction==1:
+            self.y += self.velocity
+            if self.y>50:
+                self.y -= 2*self.velocity
+                self.direction = 3
+        else:
+            self.x -= self.velocity
+            if self.x<-50:
+                self.x += 2*self.velocity
+                self.direction = 2
     
     def look(self, r_x, r_y, bags, d_x, d_y):
         max_y = self.y + np.arctan(self.angle)*self.distance
@@ -38,6 +62,8 @@ class Cop:
         min_x = self.x
         if r_x > min_x and r_x < max_x and r_y > min_y and r_y <max_y:
             self.seen = 1
+        else:
+            self.seen = 0
         if np.abs(r_x-self.x)<=1 and np.abs(r_y-self.y)<=1:
             self.captured = True
         for bag in bags:

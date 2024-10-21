@@ -20,8 +20,8 @@ import matplotlib.patches as patches
 #dataset = [[-1,-1],[-1,1],[1,-1],[1,1]]
 #labels = [0,1,1,0]
 # Parameters of the neural network
-layers = [19, 40, 40,40,40,40,40,40,40,40,40, 2]
-layers_robber = [21, 40, 40,40,40,40,40,40,40,40,40, 2]
+layers = [19, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 2]
+layers_robber = [21, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 2]
 
 # Parameters of the evolutionary algorithm
 genesize_cop = np.sum(np.multiply(layers[1:],layers[:-1])) + np.sum(layers[1:]) 
@@ -140,7 +140,19 @@ def viz():
     copYlist.append(c.y)
     robberXlist.append(r.x)
     robberYlist.append(r.y)
-    
+    flashlist = []
+    if c.direction == 1:
+        flashlist.append([67.5, 112.5])
+        
+    elif c.direction == 2:
+        flashlist.append([-22.5, 22.5])
+        
+    elif c.direction == 3:
+        flashlist.append([-67.5, -112.5])
+        
+    else:
+        flashlist.append([157.5, 202.5])
+        
     
     bags_x = [-1, -1 ,-1 , -1, -1 ,-1]
     bags_y = [ -1, -1, -1, -1, -1, -1]
@@ -182,6 +194,17 @@ def viz():
         copYlist.append(c.y)
         robberXlist.append(r.x)
         robberYlist.append(r.y)
+        if c.direction == 1:
+            flashlist.append([67.5, 112.5])
+            
+        elif c.direction == 2:
+            flashlist.append([-22.5, 22.5])
+            
+        elif c.direction == 3:
+            flashlist.append([-67.5, -112.5])
+            
+        else:
+            flashlist.append([157.5, 202.5])
         
         c.look(r.x, r.y, r.money_bag_coords, r.deposit_x, r.deposit_y)
         r.look(c.seen)
@@ -203,12 +226,13 @@ def viz():
     copYlist = np.array(copYlist)
     robberXlist = np.array(robberXlist)
     robberYlist = np.array(robberYlist)
+    flashlist = np.array(flashlist)
     fig, ax = plt.subplots(figsize=(10,8))
     plt.subplots_adjust(right=0.75) 
     line, = ax.plot([], [], '-o', markersize=2)
-    current, = ax.plot([], [], 'go', label='Current Position', markersize=10)
+    current, = ax.plot([], [], 'go', label='Robber Current Position', markersize=10)
     cline, = ax.plot([], [], '-o', markersize=2)
-    ccurrent, = ax.plot([], [], 'bo', label='Current Position', markersize=10)
+    ccurrent, = ax.plot([], [], 'bo', label='Cop Current Position', markersize=10)
     
     x_coords, y_coords = zip(*r.money_bag_coords)
     ax.set_xlim(-60, 60)
@@ -247,14 +271,14 @@ def viz():
         # else:
         #     start_angle = 157.5
         #     end_angle = 202.5
-        flashlight.set_theta1(start_angle)
-        flashlight.set_theta2(end_angle)
+        flashlight.set_theta1(flashlist[frame][0])
+        flashlight.set_theta2(flashlist[frame][1])
         
         return line, current, cline, ccurrent, flashlight
 
     # Create the animation
     anim = FuncAnimation(fig, update, frames=len(robberXlist), interval=50, blit=True)
-    anim.save('cops_and_robbers_animation_GAY_12.gif', writer=PillowWriter(fps=20))
+    anim.save('cops_and_robbers_animation_GAY_test.gif', writer=PillowWriter(fps=20))
     # plt.plot(copXlist,copYlist)
     # plt.plot(robberXlist,robberYlist)
     # plt.grid()

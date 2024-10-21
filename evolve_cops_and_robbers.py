@@ -201,7 +201,7 @@ def viz():
             flashlist.append([-22.5, 22.5])
             
         elif c.direction == 3:
-            flashlist.append([-67.5, -112.5])
+            flashlist.append([-112.5, -67.5])
             
         else:
             flashlist.append([157.5, 202.5])

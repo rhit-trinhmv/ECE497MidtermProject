@@ -14,9 +14,9 @@ import numpy as np
 
 class randomWalker():
     
-    def __init__(self):
-        self.x = 3
-        self.y = 3
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
         self.velocity = 1
         
     def step(self):

@@ -21,7 +21,7 @@ import matplotlib.patches as patches
 
 
 # Parameters of the neural network
-layers = [4,2, 2, 2, 2,  4]
+layers = [4,2,4]
 robber_locations = [[25, 25]]
 # robber_locations = [[25, 25],[-25,-25]]
 # robber_locations = [[25, 25],[-25,-25],[-25,25],[25,-25]]
@@ -338,8 +338,8 @@ def viz():
         return line, current, cline, ccurrent
 
     # Create the animation
-    anim = FuncAnimation(fig, update, frames=len(robberXlist), interval=50, blit=True)
-    anim.save('cops_and_robbers_animation_Final_oneTrainingSuccess_test.gif', writer=PillowWriter(fps=20))
+    # anim = FuncAnimation(fig, update, frames=len(robberXlist), interval=50, blit=True)
+    # anim.save('cops_and_robbers_animation_Final_RandomWalker_oneTrainingSuccess_test.gif', writer=PillowWriter(fps=20))
     # plt.plot(copXlist,copYlist)
     # plt.plot(robberXlist,robberYlist)
     # plt.grid()
@@ -356,8 +356,8 @@ def viz():
     # plt.show()
 
 # Visualize data
-viz()
+# viz()
 
 #  Test around 100 points
-# testpoints()
+testpoints()
 

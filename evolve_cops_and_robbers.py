@@ -173,7 +173,39 @@ def testpoints():
                     break
     print("total: " + str(total) + "/300")
         
-        
+
+def vizTestPoints():
+    circleXlist = []
+    circleYlist = []
+    radius = [10, 25, 40]
+    for l in range(len(radius)):
+        rob_x = 0
+        rob_y = radius[l]
+        for i in range(radius[l]*4):
+            circleXlist.append(rob_x)
+            circleYlist.append(rob_y)
+            if(rob_x<radius[l] and rob_x>=0 and rob_y>0 and rob_y<=radius[l]):
+                rob_x+=1
+                rob_y-=1
+            elif(rob_y>-radius[l] and rob_y<=0 and rob_x>0 and rob_x<=radius[l]):
+                rob_x-=1
+                rob_y-=1
+            elif(rob_x>-radius[l] and rob_x<=0 and rob_y<0 and rob_y>=-radius[l]):
+                rob_x-=1
+                rob_y+=1
+            else:
+                rob_x+=1
+                rob_y+=1
+                
+    for i in range(len(circleXlist)):
+        plt.plot(circleXlist[i],circleYlist[i], 'ro')
+    plt.grid()
+    
+    plt.xlabel("X")
+    plt.ylabel("Y")
+    plt.title("Training Spots")
+    plt.show()
+
 
 # Function to visualize the best solution
 def viz():
@@ -359,5 +391,7 @@ def viz():
 # viz()
 
 #  Test around 100 points
-testpoints()
+# testpoints()
 
+# Visualize 300 test points
+vizTestPoints()
